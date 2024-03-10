@@ -1,6 +1,28 @@
-    var deviceWidth = document.body.clientWidth ;
+    //------提前下载和缓存APP需要的图片
+const booksPage = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
+const teachersFace = ['0.jpg' , '1.jpg' , '10.jpg' , '11.jpg' , '12.jpg' , '13.jpg' , '2.jpg' , '3.jpg' , '4.jpg' , '5.jpg' , '6.jpg' , '7.jpg' , '8.jpg' , '9.jpg' , 'byz.jpg' , 'jsz.jpg' , 'xwz.jpg' ] ;
+var timer = new Date() - 1  ;
+for (let book of booksPage ){
+	let img = new Image();
+	img.src = 'lesson/' + book ;
+	img.addEventListener('load',
+	 ()=> console.log(book+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
+		 );
+}
+    timer = new Date() - 1  ;
+for (let face of teachersFace ){
+	let img = new Image();
+	img.src = 'myFace/' + face ;
+	img.addEventListener('load',
+	 ()=>console.log(face+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
+		);
+}
+
+
+	//------按用户端设备的实际情况设置基础字体和可视界面大小
+	var deviceWidth = document.body.clientWidth ;
     var deviceHeight = window.innerHeight ;
-    var fontBase = parseInt(deviceWidth / 20);
+    var fontBase = parseInt(deviceWidth / 21); //窄屏无法显示20个汉字
 	
     console.log('AppWidth:'+ deviceWidth);
     console.log('AppHeight:'+ deviceHeight);
@@ -72,7 +94,7 @@
 
   //----建立模型响应和处理touch事件产生的数据
  const chapters = ['第1章 Introduction','第2章 Number Systems','第3章 Data Storage','第4章 Computer Organization','第5章 Computer Networks and Internet','第6章 Operating Systems','第7章  Software Engineering','第8章  OOP Programming'] ;
- const books = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
+ const books = booksPage ;
  var touchModel = {
    target: null ,
    ongoingXY : [] ,
@@ -143,7 +165,7 @@
 	 }
 	  $("bookPage").src = 'lesson/' + books[this.bookNo];
    },
- } ;
+ } ; //touchModel定义完毕
 
 
   //$(66);检测下面的自定义函数
