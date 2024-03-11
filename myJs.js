@@ -1,25 +1,4 @@
-    //------提前下载和缓存APP需要的图片
-const booksPage = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
-const teachersFace = ['0.jpg' , '1.jpg' , '10.jpg' , '11.jpg' , '12.jpg' , '13.jpg' , '2.jpg' , '3.jpg' , '4.jpg' , '5.jpg' , '6.jpg' , '7.jpg' , '8.jpg' , '9.jpg' , 'byz.jpg' , 'jsz.jpg' , 'xwz.jpg' ] ;
-var timer = new Date() - 1  ;
-for (let book of booksPage ){
-	let img = new Image();
-	img.src = 'lesson/' + book ;
-	img.addEventListener('load',
-	 ()=> console.log(book+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
-		 );
-}
-    timer = new Date() - 1  ;
-for (let face of teachersFace ){
-	let img = new Image();
-	img.src = 'myface/' + face ;
-	img.addEventListener('load',
-	 ()=>console.log(face+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
-		);
-}
-
-
-	//------按用户端设备的实际情况设置基础字体和可视界面大小
+ 	//------按用户端设备的实际情况设置基础字体和可视界面大小
 	var deviceWidth = document.body.clientWidth ;
     var deviceHeight = window.innerHeight ;
     var fontBase = parseInt(deviceWidth / 21); //窄屏无法显示20个汉字
@@ -35,12 +14,51 @@ for (let face of teachersFace ){
         $("chapter").style.lineHeight = deviceHeight * 0.1 + 'px' ;
 		$("statusInfo").style.lineHeight = deviceHeight * 0.1 + 'px' ;
 
+	//------提前下载和缓存APP需要的图片
+const booksPage = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
+const teachersFace = ['0.jpg' , '1.jpg' , '10.jpg' , '11.jpg' , '12.jpg' , '13.jpg' , '2.jpg' , '3.jpg' , '4.jpg' , '5.jpg' , '6.jpg' , '7.jpg' , '8.jpg' , '9.jpg'  ] ;
+
+ 
+
   //将书封面的宽度设置填满客户设备的main区域，这也导致小尺寸图片back.jpg放大有模糊现象，可等图片加载后，异步更新为清晰的图片
   $('bookPage').style.width = deviceWidth + 'px' ;
-  setTimeout(()=>{
-    $('teacherFace').src = 'myface/0.jpg' ;
-    $('bookPage').src = 'lesson/CS.jpg' ;
-  },3000);
+  
+  setTimeout( ()=>$('teacherFace').src = 'myface/0.jpg' ,3000);
+  setTimeout( ()=>$('bookPage').src = 'lesson/CS.jpg' ,4000);
+  setTimeout(readImgOneByOne,5000);
+  
+ //测试封面图片在本地和在github上的巨大区别，分析异步代码的执行流程图
+   //函数也可看作对象，下面利用对象的属性，尝试ECMAscript的函数式编程功能
+	readImgOneByOne.timer = new Date() - 1 ;
+    readImgOneByOne.imgIndex = 0 ;
+ function readImgOneByOne(){
+	let img = new Image();
+	img.src = 'lesson/' + booksPage[readImgOneByOne.imgIndex] ;
+	if (readImgOneByOne.imgIndex < booksPage.length - 1){
+       readImgOneByOne.imgIndex ++ ;
+       img.addEventListener('load', 
+		 ()=>{ 
+		  console.log(booksPage[readImgOneByOne.imgIndex - 1]+' is loaded '+ 'within '+(new Date() - readImgOneByOne.timer)+ " ms !")
+	      readImgOneByOne.timer = new Date() - 1 ;
+		  readImgOneByOne();
+	     });
+	}
+  }
+//--- 下面代码暂时选择不用，在github图片文件太多，导致性能很难改善
+
+/*
+    timer = new Date() - 1  ;
+for (let face of teachersFace ){
+	let img = new Image();
+	img.src = 'myFace/' + face ;
+	img.addEventListener('load',
+	 ()=>console.log(face+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
+		);
+}
+*/
+
+
+ 
 
 //------touch events register and handel----------
 
