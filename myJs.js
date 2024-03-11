@@ -12,7 +12,7 @@ for (let book of booksPage ){
     timer = new Date() - 1  ;
 for (let face of teachersFace ){
 	let img = new Image();
-	img.src = 'myFace/' + face ;
+	img.src = 'myface/' + face ;
 	img.addEventListener('load',
 	 ()=>console.log(face+' is loaded '+ 'within '+(new Date() - timer)+ " ms !")
 		);
@@ -34,6 +34,13 @@ for (let face of teachersFace ){
         $("lessonName").style.lineHeight = deviceHeight * 0.15 + 'px' ;
         $("chapter").style.lineHeight = deviceHeight * 0.1 + 'px' ;
 		$("statusInfo").style.lineHeight = deviceHeight * 0.1 + 'px' ;
+
+  //将书封面的宽度设置填满客户设备的main区域，这也导致小尺寸图片back.jpg放大有模糊现象，可等图片加载后，异步更新为清晰的图片
+  $('bookPage').style.width = deviceWidth + 'px' ;
+  setTimeout(()=>{
+    $('teacherFace').src = 'myface/0.jpg' ;
+    $('bookPage').src = 'lesson/CS.jpg' ;
+  },3000);
 
 //------touch events register and handel----------
 
