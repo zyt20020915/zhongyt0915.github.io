@@ -25,22 +25,22 @@ const teachersFace = ['0.jpg' , '1.jpg' , '10.jpg' , '11.jpg' , '12.jpg' , '13.j
   
   setTimeout( ()=>$('teacherFace').src = 'myface/0.jpg' ,3000);
   setTimeout( ()=>$('bookPage').src = 'lesson/CS.jpg' ,4000);
-  setTimeout(readImgOneByOne,5000);
+  setTimeout(loadImgOneByOne,5000);
   
  //测试封面图片在本地和在github上的巨大区别，分析异步代码的执行流程图
    //函数也可看作对象，下面利用对象的属性，尝试ECMAscript的函数式编程功能
-	readImgOneByOne.timer = new Date() - 1 ;
-    readImgOneByOne.imgIndex = 0 ;
- function readImgOneByOne(){
+	loadImgOneByOne.timer = new Date() - 1 ;
+    loadImgOneByOne.imgIndex = 0 ;
+ function loadImgOneByOne(){
 	let img = new Image();
-	img.src = 'lesson/' + booksPage[readImgOneByOne.imgIndex] ;
-	if (readImgOneByOne.imgIndex < booksPage.length - 1){
-       readImgOneByOne.imgIndex ++ ;
+	img.src = 'lesson/' + booksPage[loadImgOneByOne.imgIndex] ;
+	if (loadImgOneByOne.imgIndex < booksPage.length - 1){
+       loadImgOneByOne.imgIndex ++ ;
        img.addEventListener('load', 
 		 ()=>{ 
-		  console.log(booksPage[readImgOneByOne.imgIndex - 1]+' is loaded '+ 'within '+(new Date() - readImgOneByOne.timer)+ " ms !")
-	      readImgOneByOne.timer = new Date() - 1 ;
-		  readImgOneByOne();
+		  console.log(booksPage[loadImgOneByOne.imgIndex - 1]+' is loaded '+ 'within '+(new Date() - loadImgOneByOne.timer)+ " ms !")
+	      loadImgOneByOne.timer = new Date() - 1 ;
+		  loadImgOneByOne();
 	     });
 	}
   }
@@ -56,6 +56,18 @@ for (let face of teachersFace ){
 		);
 }
 */
+
+//执行异步代码，动态显示19个书面图片加载进度，下面代码表现lesson文件夹下的所有文件加载进程
+var clock = setInterval(()=>{
+      let i = loadImgOneByOne.imgIndex + 1;
+      let width = parseInt( i / booksPage.length * 100) ;
+      //console.log("progress:" + width) ;
+      $('progressBar').style.width = width + '%' ;
+      if (width === 100)  {
+		   $('progressBar').textContent = "OK, Resource loaded 100%."
+		  clearInterval(clock);
+      }
+    },500);
 
 
  

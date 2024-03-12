@@ -22,7 +22,7 @@ main{
  height: 65% ;
  position:relative;
  /*在某些设备中，main容器内的bookPage插图可能高度可能超出设定范围，对超出的部分隐藏处理！*/
- overflow: hidden ;
+  overflow: hidden ; 
 }
 
 
@@ -60,6 +60,18 @@ nav>p#chapter{
  background-color: brown ;
 }
 
+div#progressBar{
+ width: 2%;
+ height: 10% ;
+ position: absolute ;
+ z-index: 5 ;
+ left:0;
+ bottom:20%;
+ background-color:brown;
+ color:white;
+ padding:0.5em;
+ line-height:3em;
+}
 /*
 @media screen and (min-width: 600px){
   img#bookPage{
