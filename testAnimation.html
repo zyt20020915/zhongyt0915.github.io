@@ -1,0 +1,106 @@
+
+<!doctype html>
+<html  lang="zh">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>结合递归函数，展现异步动画代码</title>
+  
+   <style>
+    body, html {
+      height: 100%;
+     }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family:Arial, Sans-Serif;
+      background-color: black ; 
+    }
+
+     #app {
+      position: relative ;
+     }
+
+     img#bgimage {
+      position: absolute ;
+      animation: fadein 600ms;
+	  opacity: 0.3 ;
+    }
+
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 0.3; }
+    }
+	ol{color:rgb(150,250,100);
+	  font-size:1.5em;
+	  font-family:"Consolas"}
+	</style>
+  </head>
+  <body>
+   <div id="app">
+    <img id="bgimage" src="lesson/CS.jpg" >
+	<ol id="ol">
+		
+	</ol>
+   </div>
+   <script type="text/javascript">
+   <!--
+    print("本程序用异步代码实现了文字动画。主要是创作性地利用函数的对象特性，让print函数能智能判断当前的异步输出的完成情况，并结合requestAnimationFrame这个强大API实现动画，每个字符的细节动画输出和整个字符串的整体有序把控到位！");
+
+	const booksPage = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
+	
+	const backImgs = [] ;
+	for (let book of booksPage ){
+		let img = new Image() ;
+		img.src = "lesson/" + book ;
+		img.id = "bgimage" ;
+		backImgs.push(img) ;
+	}
+	document.body.addEventListener("click", function(){
+	  randI =  parseInt(Math.random() * booksPage.length) ;
+	  $("app").replaceChild(backImgs[randI],$("bgimage"));
+	}) ;
+
+	print("Hello , this App will check the preformace of you computing system! ") ;
+	print("I'm very good at programmming! ") ;
+	print("Recursive function can do a lot of pretty good things! ") ;
+    function print(str){
+	  if (print.str){ //如果存在print.str则说明print函数正在异步输出中
+		  setTimeout(()=>print(str) , 1000) ;
+		  return ;
+	  }
+	  print.str= str ;
+	  let liDom = document.createElement('li') ;
+	  let olDom = $("ol");
+	  
+	  liDom.textContent = print.str[0] ; 
+	  window.requestAnimationFrame(oneChar);
+	   function oneChar(){
+		 if(print.str.length > 1){
+	      liDom.textContent += print.str[1] ;
+          print.str = print.str.slice(1) ;
+		  window.requestAnimationFrame(oneChar);
+		  }else{
+		   print.str = undefined ;
+		  }
+	   }
+	   
+	  olDom.appendChild(liDom);
+	} // print(str)
+    
+
+
+	function $(eleId){
+     if (typeof eleId !== 'string'){
+	   throw("$函数调用实参错误，行参必须是字符串！");
+	   return 
+     }
+      return document.getElementById(eleId) ;
+    }
+   //-->
+   </script> 
+  </body>
+ </html>
