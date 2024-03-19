@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <title>结合递归函数，展现异步动画代码</title>
+  <title>增加“毫秒表”模型，基于时间维度的事件探索</title>
   
    <style>
     body, html {
@@ -37,7 +37,50 @@
 	ol{color:rgb(150,250,100);
 	  font-size:1.5em;
 	  font-family:"Consolas"}
+	ol>li{
+	  text-indent: 0.5em ;
+	  margin-left: 1em ;
+	}
 	</style>
+	<script type="text/javascript">
+	<!--
+	 var timer = { //设计一个毫秒计时器模型，该模型可以同时并行记录多个事件的发生经历的时间，开发者字符串（msg）作为时钟的唯一标识，当timer.begin(msg)运行开启计时，而timer.end(msg)用于结束该标识的计时，返回毫秒级别的时间差。
+	         clock : [] ,
+			 begin : function(msg){
+			          let beginTime = new Date() - 0 ;
+					  let beginLable = msg ;
+					  this.clock.push( {beginTime , beginLable } ) ;
+			  }, // timer.begin
+			 end :  function(msg){
+			         let endTime = new Date() - 0 ;
+					 let clock  ;
+					 let length = this.clock.length ;
+					 for (let i = 0 ; i < length ; i++ ){ 
+					 //设计一个交换算法，将找到即将结束时钟对象，从timer.clock数组中删除。
+						 if (this.clock[i].beginLable === msg){
+							 clock = this.clock[i] ;
+							 this.clock[i] = this.clock[length-1] ;
+							 this.clock.pop();
+                             return endTime - clock.beginTime ;
+							}
+					 }
+					 throw("你错误地使用了计时器：timer.end方法，查看参数："+ msg);
+					 
+			  }, // timer.end 
+			} ;
+
+		 //window对象开始读取页面所需的资源文件
+		 timer.begin('windowLoad') ; 
+		 
+		 window.addEventListener('load',function(){
+           let time =  timer.end('windowLoad') ;
+		   print("APP加载完成所有资源文件，共使用 " + time + " ms!") ;
+		 }) ;
+
+
+	timer.end('wrong parameter') ; //故意写错，用来测试计时器模型的参数。
+	//-->
+	</script>
   </head>
   <body>
    <div id="app">
@@ -50,19 +93,34 @@
    <!--
     print("本程序用异步代码实现了文字动画。主要是创作性地利用函数的对象特性，让print函数能智能判断当前的异步输出的完成情况，并结合requestAnimationFrame这个强大API实现动画，每个字符的细节动画输出和整个字符串的整体有序把控到位！");
 
-	const booksPage = ['CS.jpg' , 'CSS.jpg' , 'CT.jpg' , 'GRE.jpg' , 'Git.jpg' , 'NinjaJS.jpg' , 'STEM.jpg' , 'UML.jpg' , 'bitCoin.jpg' , 'canvas.jpg' , 'cssAnimation.jpg' , 'gitForTeams.jpg' , 'internet.jpg' , 'javaScript.jpg' , 'learnCSS.jpg' , 'linuxCMD.jpg' , 'logic.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
 	
-	const backImgs = [] ;
+ const backImgs = [] ; //全局变量
+ {   
+	const booksPage = ['CS.jpg' , 'nutrition.jpg' , 'webProgramming.jpg' ] ;
+
 	for (let book of booksPage ){
+		timer.begin(book) ;
 		let img = new Image() ;
 		img.src = "lesson/" + book ;
 		img.id = "bgimage" ;
+		img.addEventListener('load',function(){
+		    print("图像:" + book + "完成load事件要 " + timer.end(book) +'ms !');
+		});
 		backImgs.push(img) ;
 	}
+ }
+  //为什么下面这几条事件处理函数不能写在head标签中呢？但是window.load事件则可以？用这个例子可以了解Web APP的对象世界的建立顺序。
 	document.body.addEventListener("click", function(){
-	  randI =  parseInt(Math.random() * booksPage.length) ;
+	  let randI =  parseInt(Math.random() *  backImgs.length) ;
 	  $("app").replaceChild(backImgs[randI],$("bgimage"));
 	}) ;
+    window.document.body.addEventListener('keydown',function(ev){
+            timer.begin('key'+ev.key) ;
+			 }) ;
+	window.document.body.addEventListener('keyup',function(ev){
+		  let time =  timer.end('key'+ev.key) ;
+		  print("您刚才敲： "+ ev.key  + "键，用了" + time +  " ms!") ;
+		 }) ;
 
 	print("Hello , this App will check the preformace of you computing system! ") ;
 	print("I'm very good at programmming! ") ;
