@@ -44,7 +44,9 @@
 	</style>
 	<script type="text/javascript">
 	<!--
-	 var timer = { //设计一个毫秒计时器模型，该模型可以同时并行记录多个事件的发生经历的时间，开发者字符串（msg）作为时钟的唯一标识，当timer.begin(msg)运行开启计时，而timer.end(msg)用于结束该标识的计时，返回毫秒级别的时间差。
+//设计一个毫秒计时器模型，该模型可以同时并行记录多个事件的发生经历的时间，开发者可以用字符串（msg）作为时钟的唯一标识，进行操作。原理简述如下：当timer.begin(msg)运行开启计时，timer.clock记录一个时钟对象，而timer.end(msg)用于结束该标识的计时，返回毫秒级别的时间差，同时把相应的时钟对象删除。
+//注意：当错误地使用timer计时器时，后台会抛出（throw）参数错误这类严重的警告，当发生此类错误时，请查看调用timer的代码，同时timer不能正常来测算同步代码的时间，即使这样timer检测异步代码的执行时间还是完美的！
+	 var timer = { 
 	         clock : [] ,
 			 begin : function(msg){
 			          let beginTime = new Date() - 0 ;
@@ -56,7 +58,7 @@
 					 let clock  ;
 					 let length = this.clock.length ;
 					 for (let i = 0 ; i < length ; i++ ){ 
-					 //设计一个交换算法，将找到即将结束时钟对象，从timer.clock数组中删除。
+					 //将找到的时钟对象，该时钟需要结束，下面设计一个交换算法，将其从timer.clock数组中删除。
 						 if (this.clock[i].beginLable === msg){
 							 clock = this.clock[i] ;
 							 this.clock[i] = this.clock[length-1] ;
@@ -64,7 +66,8 @@
                              return endTime - clock.beginTime ;
 							}
 					 }
-					 throw("你错误地使用了计时器：timer.end方法，查看参数："+ msg);
+
+					 throw("你错误地使用了timer.end方法使，请查看参数："+ msg );
 					 
 			  }, // timer.end 
 			} ;
@@ -78,7 +81,16 @@
 		 }) ;
 
 
-	timer.end('wrong parameter') ; //故意写错，用来测试计时器模型的参数。
+	//timer.end('wrong parameter') ; //故意写错，用来测试计时器模型的参数。
+{ 
+    timer.begin("A test for sync code");
+	for (let i=0; i < 1e5 ; i++){
+		let j = i*i ;
+	}
+    let t = timer.end("A test for sync code");
+	console.log("本机本执行10万次平方运算的时间：" + t +" ms.");
+}
+    timer.begin("body元素内代码运行的时间");
 	//-->
 	</script>
   </head>
@@ -125,7 +137,43 @@
 	print("Hello , this App will check the preformace of you computing system! ") ;
 	print("I'm very good at programmming! ") ;
 	print("Recursive function can do a lot of pretty good things! ") ;
-    function print(str){
+  //下面为鼠标增设一个鼠标的移动事件处理程序，结合DOM技术和汉字的API编码转换，实现满屏汉字
+  { //路过的代码块
+   let li = '李' ;
+   let hong = '宏' ;
+   let begin = hong.charCodeAt() ;
+   let end = li.charCodeAt() ;
+   let lihong = "" ; // lihong将存放 unicode 字符编码中， 李 和 宏 之间的三千多个汉字编码
+    for(let i=begin ; i <= end ; i++){
+      lihong += String.fromCharCode(i) ;
+    }
+	document.body.lihong = lihong ; //离开本代码快，lihong变量不会存在，因此我们姑且把这个字符串存放在body对象内
+    document.body.addEventListener('mousedown',function(ev){
+	   timer.begin('mouse');
+	  //console.log('(x:'+ ev.pageX + ', y:' + ev.pageY + ')');
+	      let arr = this.lihong ;
+     	  //console.log(arr[arr.length - 1]);
+		  let div = document.createElement("div");
+		      div.textContent = arr[arr.length - 1] ;
+			  div.style.position = 'absolute' ;
+			  div.style.color = 'white' ;
+              div.style.left = ev.pageX + 'px';
+              div.style.top = ev.pageY + 'px';
+			document.body.appendChild(div) ;
+		 this.lihong = arr.slice(0, arr.length - 1) ;
+		console.log('本次DOM渲染代码运行时间：' + timer.end('mouse')+ 'ms!');
+	}) ; // body.addEventListener('mousedown'...)
+  }//路过的代码块
+
+  /*************************************************
+  writen by masterLijh
+ 2024 3 18
+   1、print函数用来在App页面上生成列表li内容，它假设body标签中有ol元素
+   2、调用函数print(str)会用动画的方式把str逐个字符打印出来
+   3、该函数利用了函数式编程方法，把函数看作对象，建立和利用print.str属性
+
+  ******************/
+	function print(str){
 	  if (print.str){ //如果存在print.str则说明print函数正在异步输出中
 		  setTimeout(()=>print(str) , 1000) ;
 		  return ;
@@ -158,6 +206,8 @@
      }
       return document.getElementById(eleId) ;
     }
+
+ console.log('body元素内的同步代码运行的时间:' + timer.end("body元素内代码运行的时间") +'ms!');	
    //-->
    </script> 
   </body>
