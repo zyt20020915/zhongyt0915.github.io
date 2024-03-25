@@ -44,13 +44,26 @@
 	<!--
 		/*** 本程序为testHttp ，将访问与本文件同级，即txt文件夹下的文本文件
 		 通过建立httpLoader模型，学习利用window的XMLHttpRequest对象，实现任意文本文件的访问
-		 本代码本质上利用http协议进行服务器通信，因此运行环境须有客户端和服务器支撑，不能在本地运行，没有服务器支撑的可以使用本地操作系统虚拟的HTTP服务器。
+		 本代码本质上利用http协议进行服务器通信，因此运行环境须有客户端和服务器支撑，不能在本地运行，若可以安装本地http服务器也可以使用本模型。
 		 ***/
      var httpLoader = { 
-		  textContent: '' ,
-      textLines: [] ,
-          request: function( url ){
-			         this.textContent = '' ; 
+		  textContent: [] , //这是httpLoader模型对外的数据接口，request方法会把获取的文本按行分割，以数组的形式放在textLines属性中
+      _textContent: '' ,
+      request: function(url, interval){ //这是httpLoader模型的对外的方法，为适应不同的慢速网络，当异步程序interval秒后未能获取url指定的文本文件，则本方法会递归反复申请。
+               this._request(url) ;
+               typeof interval == "number" ? interval  : interval = 2 ;
+               setTimeout(function(){  //异步代码处理http访问获取的数据
+                 let txt = httpLoader._textContent ;
+                 if(txt.length > 1 ){
+                  httpLoader.textContent = txt.split("\n"); 
+                 }else{
+                  console.log('第'+ (new Date()).getSeconds() +'s, '+ "http获取文件失败，请查查原因！") ;
+                  setTimeout(httpLoader.request(url),interval*1000) ;
+                 }
+              },interval*1000); //设定重新发起http请求
+      } , // end of request
+          _request: function( url ){
+			         this._textContent = '' ; 
          // 每次开始http请求前，必须将本对象上次访问的结果删除，这样就可简单地管理textContent属性
             let xhr = new XMLHttpRequest() ;
 			          xhr.onreadystatechange = callback ; //注意：XMLHttpRequest的实例不支持 addEventListener方法
@@ -82,25 +95,20 @@
                       console.log("HttpServer refused ! ");
                       return ;
                    }else{
-                       httpLoader.textContent = this.responseText; 
+                       httpLoader._textContent = this.responseText; 
                    } // success of 
                 }//readyState === 4
        }//end of callback	     
-      },//end request method
+      },//end _request method
 	 } ; //End httpLoader
 	 
 //用httpLoader模型读入文本文件，用print函数实现输出
-httpLoader.request('txt/paper.txt') ; //同步代码启动http请求
-   setTimeout(function(){  //异步代码处理http访问获取的数据
-      if(httpLoader.textContent.length > 1 ){
-         httpLoader.textLines = httpLoader.textContent.split("\r"); 
-         for(let line of httpLoader.textLines ) {
-           print(line ) ;
-         }       
-      }else{
-         print("文本获取失败，请查查原因！") ;
+httpLoader.request('txt/paper.txt' ) ; //模型以同步代码方式启动，但内部http请求全部改成异步，可以适应任何糟糕环境的慢速网络状况，模型内部复杂内部极其精巧，但使用却非常简单。
+setTimeout(() => { //httpLoader.textLines内的数据建立时间是不确定的，但肯定需要等，本例延迟3s输出paper.txt 中的文本
+     for(let line of httpLoader.textContent){
+     print(line) ;
       }
-   },1000);
+    }, 3000);
 
 
 	 var timer = { 
