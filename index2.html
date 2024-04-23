@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>平移轮播</title>
+		<style>
+			.container {
+				width: 500px;
+				height: 350px;
+				margin: 80px auto;
+				overflow: hidden;
+				border: 2px solid orangered;
+			}
+
+			.swip {
+				width: 500%;
+				height: 350px;
+				animation: mySwip 15s linear infinite;
+			}
+
+			.swip div {
+				width: 500px;
+				height: 350px;
+				float: left;
+			}
+
+			.item1 {
+				background-color: #800080;
+			}
+
+			.item2 {
+				background-color: #55ff00;
+			}
+
+			.item3 {
+				background-color: #55ffff;
+			}
+
+			.item4 {
+				background-color: #55557f;
+			}
+
+			.item5 {
+				background-color: #ff557f;
+			}
+
+			@keyframes mySwip {
+				0% {
+					margin-left: 0;
+				}
+
+				10% {
+					margin-left: 0;
+				}
+
+				20% {
+					margin-left: -500px;
+				}
+
+				30% {
+					margin-left: -500px;
+				}
+
+				40% {
+					margin-left: -1000px;
+				}
+
+				50% {
+					margin-left: -1000px;
+				}
+
+				60% {
+					margin-left: -1500px;
+				}
+
+				70% {
+					margin-left: -1500px;
+				}
+
+				80% {
+					margin-left: -2000px;
+				}
+
+				90% {
+					margin-left: -2000px;
+				}
+
+				100% {
+					margin-left: 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="swip">
+				<div class="imgs/1.jpg"></div>
+				<div class="imgs/2.jpg"></div>
+				<div class="imgs/3.jpg"></div>
+				<div class="imgs/4.jpg"></div>
+				<div class="imgs/5.jpg"></div>
+				<div class="imgs/6.jpg"></div>
+				<div class="imgs/7.jpg"></div>
+				<div class="imgs/8.jpg"></div>
+			</div>
+		</div>
+	</body>
+</html>
+
