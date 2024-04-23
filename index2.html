@@ -1,109 +1,187 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>平移轮播</title>
-		<style>
-			.container {
-				width: 500px;
-				height: 350px;
-				margin: 80px auto;
-				overflow: hidden;
-				border: 2px solid orangered;
-			}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            height: 460px;
+            width: 1000px;
+            position: relative;
+        }
 
-			.swip {
-				width: 500%;
-				height: 350px;
-				animation: mySwip 15s linear infinite;
-			}
+        .box-img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            transition: 1.5s;
+        }
 
-			.swip div {
-				width: 500px;
-				height: 350px;
-				float: left;
-			}
+        .box-img:nth-child(1) {
+            opacity: 1;
+        }
 
-			.item1 {
-				background-color: #800080;
-			}
+        .box-img img {
+            height: 460px;
+            width: 1000px;
+        }
 
-			.item2 {
-				background-color: #55ff00;
-			}
+        /*左右切换*/
+        .box-left {
+            position: absolute;
+            left: 0;
+            top: 195px;
+            width: 35px;
+            height: 70px;
+            border-radius: 0 5px 5px 0;
+            text-align: center;
+            line-height: 70px;
+            font-size: 27px;
+            color: #b0afad;
+        }
 
-			.item3 {
-				background-color: #55ffff;
-			}
+        .box-left:hover {
+            background-color: #777777;
+            color: #ffffff;
+        }
 
-			.item4 {
-				background-color: #55557f;
-			}
+        .box-right {
+            position: absolute;
+            right: 0;
+            top: 195px;
+            width: 35px;
+            height: 70px;
+            border-radius: 5px 0 0 5px;
+            text-align: center;
+            line-height: 70px;
+            font-size: 27px;
+            color: #b0afad;
+        }
 
-			.item5 {
-				background-color: #ff557f;
-			}
+        .box-right:hover {
+            background-color: #777777;
+            color: #ffffff;
+        }
 
-			@keyframes mySwip {
-				0% {
-					margin-left: 0;
-				}
+        /*圆点*/
+        .box-dot {
+            position: absolute;
+            right: 50px;
+            bottom: 20px;
+        }
 
-				10% {
-					margin-left: 0;
-				}
+        .box-dot ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-				20% {
-					margin-left: -500px;
-				}
+        .box-dot ul li {
+            width: 14px;
+            height: 14px;
+            border-radius: 100%;
+            background-color: #4a5460;
+            float: left;
+            margin-right: 10px;
+        }
 
-				30% {
-					margin-left: -500px;
-				}
+        .box-dot ul li:hover, .box-dot ul li:nth-child(1) {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <!-- 轮播图 -->
+    <div class="box-img"><img src="imgs/1.jpg"></div>
+    <div class="box-img"><img src="imgs/2.jpg"></div>
+    <div class="box-img"><img src="imgs/3.jpg"></div>
+    <div class="box-img"><img src="imgs/4.jpg"></div>
+    <div class="box-img"><img src="imgs/5.jpg"></div>
+    <div class="box-img"><img src="imgs/6.jpg"></div>
+    <!-- 左右切换 -->
+    <div class="box-left">&lt;</div>
+    <div class="box-right">&gt;</div>
+    <!-- 圆点 -->
+    <div class="box-dot">
+        <ul>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+        </ul>
+    </div>
+</div>
+</body>
+<script src="static/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        var index = 0;
+        var timer;
 
-				40% {
-					margin-left: -1000px;
-				}
+        // 自动切换
+        function f() {
+            var timer = setInterval(function () {
+                $(".box-img").css("opacity", 0);
+                $(".box-img").eq(index).css("opacity", 1);
+                $(".btn").css("background-color", "#4a5460");
+                $(".btn").eq(index).css("background-color", "#ffffff");
+                if ($(".box-img").length - 1 === index) {
+                    index = 0
+                } else {
+                    index++;
+                }
+            }, 4000);
+        }
 
-				50% {
-					margin-left: -1000px;
-				}
-
-				60% {
-					margin-left: -1500px;
-				}
-
-				70% {
-					margin-left: -1500px;
-				}
-
-				80% {
-					margin-left: -2000px;
-				}
-
-				90% {
-					margin-left: -2000px;
-				}
-
-				100% {
-					margin-left: 0;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="swip">
-				<div class="imgs/1.jpg"></div>
-				<div class="imgs/2.jpg"></div>
-				<div class="imgs/3.jpg"></div>
-				<div class="imgs/4.jpg"></div>
-				<div class="imgs/5.jpg"></div>
-				<div class="imgs/6.jpg"></div>
-				<div class="imgs/7.jpg"></div>
-				<div class="imgs/8.jpg"></div>
-			</div>
-		</div>
-	</body>
+        f();
+        // 左右切换
+        $(".box-left").click(function () {
+            clearInterval(timer);
+            // 点击左，index减1，减到最小时让成为最大
+            if (index === 0) {
+                index = $(".box-img").length - 1;
+            } else {
+                index--;
+            }
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+        $(".box-right").click(function () {
+            clearInterval(timer);
+            // 点击右，index加1，加到最大时让成为最小
+            if (index === $(".box-img").length - 1) {
+                index = 0;
+            } else {
+                index++;
+            }
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+        // 点击圆点切换轮播图
+        $(".btn").click(function () {
+            clearInterval(timer);
+            // 获取第几个圆点
+            index = $(this).index()
+            // alert(index)
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+    })
+</script>
 </html>
-
