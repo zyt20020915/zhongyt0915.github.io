@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+ </head>
+ <body>
+<style>
+#frame                                     //盒子A
+{
+    width:769px;
+    height:343px;
+    margin-left: 30px;
+    overflow: hidden;
+    position: relative;
+   /* border:1px solid darkorchid;*/
+}
+#frame .photos                           //盒子B
+{
+    width:3076px;
+    height:343px;
+    animation: move 10s ease infinite; 
+        //animation属性要与keyframes规则进行绑定
+       //注意 动画效果，可根据具体情况调整
+}
+#frame .photos img
+{
+    width:769px;
+    height:343px;
+    float:left;                          //横向排列在盒子B里
+}
+@keyframes move
+{
+    0%, 15% {margin-left: 0;}
+    25%, 40% {margin-left: -769px;}
+    55%, 70% {margin-left: -1538px;}
+    85%, 100% {margin-left: -2307px;}     //图片的张数不同，设置也不一样
+}
+
+</style>
+
+
+  <div id="frame">
+     <div class="photos">
+          <img src="imgs/1.jpg" height="342" width="759"/>
+          <img src="imgs/2.jpg" height="342" width="759"/>
+          <img src="imgs/3.jpg" height="342" width="759"/>
+          <img src="imgs/4.jpg" height="342" width="759"/>
+		  <img src="imgs/5.jpg" height="342" width="759"/>
+		  <img src="imgs/6.jpg" height="342" width="759"/>
+		  <img src="imgs/7.jpg" height="342" width="759"/>
+		  <img src="imgs/8.jpg" height="342" width="759"/>
+      </div>
+</div>
+
+ </body>
+</html>
