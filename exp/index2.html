@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的日常</title>
+    <style>
+	footer {  
+    background-color: #333;  
+    color: white;  
+    text-align: center;  
+    padding: 10px;  
+    position: fixed;  
+    bottom: 0;  
+    width: 100%;  
+}
+
+	
+        .box {
+            height: 460px;
+            width: 1000px;
+            position: absolute;
+        }
+
+        .box-img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            transition: 3s;
+        }
+
+        .box-img:nth-child(1) {
+            opacity: 1;
+        }
+
+        .box-img img {
+            height: 600px;
+            width: 1000px;
+        }
+
+        /*左右切换*/
+        .box-left {
+            position: absolute;
+            left: 0;
+            top: 195px;
+            width: 35px;
+            height: 70px;
+            border-radius: 0 5px 5px 0;
+            text-align: center;
+            line-height: 70px;
+            font-size: 27px;
+            color: #b0afad;
+        }
+
+        .box-left:hover {
+            background-color: #777777;
+            color: #ffffff;
+        }
+
+        .box-right {
+            position: absolute;
+            right: 0;
+            top: 195px;
+            width: 35px;
+            height: 70px;
+            border-radius: 5px 0 0 5px;
+            text-align: center;
+            line-height: 70px;
+            font-size: 27px;
+            color: #b0afad;
+        }
+
+        .box-right:hover {
+            background-color: #777777;
+            color: #ffffff;
+        }
+
+        /*圆点*/
+        .box-dot {
+            position: absolute;
+            right: 50px;
+            bottom: 0px;
+        }
+
+        .box-dot ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .box-dot ul li {
+            width: 14px;
+            height: 14px;
+            border-radius: 100%;
+            background-color: #4a5460;
+            float: left;
+            margin-right: 10px;
+        }
+
+        .box-dot ul li:hover, .box-dot ul li:nth-child(1) {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <!-- 轮播图 -->
+    <div class="box-img"><img src="imgs/1.jpg"></div>
+    <div class="box-img"><img src="imgs/2.jpg"></div>
+    <div class="box-img"><img src="imgs/3.jpg"></div>
+    <div class="box-img"><img src="imgs/4.jpg"></div>
+    <div class="box-img"><img src="imgs/5.jpg"></div>
+    <div class="box-img"><img src="imgs/6.jpg"></div>
+    <!-- 左右切换 -->
+    <div class="box-left">&lt;</div>
+    <div class="box-right">&gt;</div>
+    <!-- 圆点 -->
+    <div class="box-dot">
+        <ul>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+            <li class="btn"></li>
+        </ul>
+    </div>
+</div>
+<div>
+ <footer> 
+   <p>钟雅婷 江西科技师范大学 20213637</p>
+  </footer> 
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script>
+    $(function () {
+        var index = 0;
+        var timer;
+
+        // 自动切换
+        function f() {
+            var timer = setInterval(function () {
+                $(".box-img").css("opacity", 0);
+                $(".box-img").eq(index).css("opacity", 1);
+                $(".btn").css("background-color", "#4a5460");
+                $(".btn").eq(index).css("background-color", "#ffffff");
+                if ($(".box-img").length - 1 === index) {
+                    index = 0
+                } else {
+                    index++;
+                }
+            }, 4000);
+        }
+
+        f();
+        // 左右切换
+        $(".box-left").click(function () {
+            clearInterval(timer);
+            // 点击左，index减1，减到最小时让成为最大
+            if (index === 0) {
+                index = $(".box-img").length - 1;
+            } else {
+                index--;
+            }
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+        $(".box-right").click(function () {
+            clearInterval(timer);
+            // 点击右，index加1，加到最大时让成为最小
+            if (index === $(".box-img").length - 1) {
+                index = 0;
+            } else {
+                index++;
+            }
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+        // 点击圆点切换轮播图
+        $(".btn").click(function () {
+            clearInterval(timer);
+            // 获取第几个圆点
+            index = $(this).index()
+            // alert(index)
+            $(".box-img").css("opacity", 0);
+            $(".box-img").eq(index).css("opacity", 1);
+            $(".btn").css("background-color", "#4a5460");
+            $(".btn").eq(index).css("background-color", "#ffffff");
+            f();
+        });
+    })
+</script>
+</html>
